@@ -1,7 +1,9 @@
-gensim==4.2.0
-numpy==1.23.2
-pandas==1.4.4
-scipy==1.9.1
-matplotlib==3.5.3
-sklearn==1.1.2
-
+gensim>=4.2.0
+numpy>=1.23.0
+pandas>=1.4.0
+scipy>=1.9.0
+matplotlib>=3.5.0
+scikit-learn>=1.1.1
+torch
+transformers
+tqdm
