@@ -6,7 +6,6 @@ from tqdm import tqdm
 from helpers import collate, ContextsDataset
 from gensim.models.word2vec import LineSentence
 import torch
-import pandas as pd
 from torch.utils.data import DataLoader, SequentialSampler
 from transformers import AutoModelForMaskedLM, AutoTokenizer
 
@@ -42,8 +41,6 @@ if __name__ == "__main__":
     args = parser.parse_args()
 
     # Loading the test set with all forms of target words
-    #graded = pd.read_csv("targets/english/graded_nopos.txt", sep="\t", header=None,
-    #                         names=['word', 'truth'])
 
     targets = defaultdict(list)
     with open("targets/english/target_forms_udpipe.csv", 'r', encoding='utf-8') as f_in:
@@ -69,7 +66,6 @@ if __name__ == "__main__":
     tokenizer = AutoTokenizer.from_pretrained(args.model, never_split=targetforms)
     model = AutoModelForMaskedLM.from_pretrained(args.model, output_hidden_states=True)
     model.to(device)
-
 
     # Embedding part: extracting token representations of the target words
 
@@ -97,17 +93,17 @@ if __name__ == "__main__":
 
             if len(form_id) == 0:
                 logger.info(f'Empty string? Lemma: {lemma}\t'
-                      f'Form:"{form}"\tTokenized: "{tokenizer.tokenize(form)}"')
+                            f'Form:"{form}"\tTokenized: "{tokenizer.tokenize(form)}"')
                 continue
 
             if len(form_id) == 1 and form_id[0] == tokenizer.unk_token_id:
-                logger.info(f'Tokenizer returns UNK for this word form. '
-                      f'Lemma: {lemma}\tForm: {form}\tTokenized: {tokenizer.tokenize(form)}')
+                logger.info(f'Tokenizer returns UNK for this word form. Lemma: {lemma}\t'
+                            f'Form: {form}\tTokenized: {tokenizer.tokenize(form)}')
                 continue
 
             if len(form_id) > 1:
-                logger.info(f'Word form split into subtokens. '
-                      f'Lemma: {lemma}\tForm: {form}\tTokenized: {tokenizer.tokenize(form)}')
+                logger.info(f'Word form split into subtokens. Lemma: {lemma}\t'
+                            f'Form: {form}\tTokenized: {tokenizer.tokenize(form)}')
 
             ids2lemma[tuple(form_id)] = lemma
             lemma2ids[lemma].append(tuple(form_id))
@@ -199,7 +195,7 @@ if __name__ == "__main__":
                     logger.debug(b_id)
                     logger.debug(lemma)
                     logger.debug(usage_vector)
-                    #usage_vector = np.zeros(usage_vector.shape[1])
+                    # usage_vector = np.zeros(usage_vector.shape[1])
                     # For simplicity, in these cases, we just take the vector
                     # of the previous instance of the same word:
                     usage_vector = usages[lemma][curr_idx[lemma]-1, :]
