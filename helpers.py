@@ -95,7 +95,6 @@ class ContextsDataset(torch.utils.data.Dataset):
         self.context_size = context_size
 
         with warnings.catch_warnings():
-            print("Start extracting contexts...")
             for sentence in tqdm(sentences, total=n_sentences):
                 sentence_token_ids_full = tokenizer.encode(' '.join(sentence),
                                                            add_special_tokens=False)
